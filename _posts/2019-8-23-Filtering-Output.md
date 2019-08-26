@@ -2,7 +2,7 @@
 layout: post
 title: Filtering Output
 ---
-# Finding commands to filter with
+# Finding filtering commands
 
 In my last post, I talked about commands like `Get-Help` and `Get-Command` to find commands to use, and what parameter those commands require. Now, we're going to use them to find commands that we can use to filter our output. In all of my examples, I am either going to use `Get-Process` or `Get-ChildItem` to start, and filter the output. While both of these commands have ways of filtering built in, this will be a good way to show some of the other cmdlets in PowerShell
 
@@ -65,4 +65,50 @@ As you can see, there is a lot that this cmdlet can do, and I feel like I've scr
 
 ### Select-Object
 
-If you walk away from this post knowing anything, it should be `Select-Object`.
+If you walk away from this post knowing anything, it should be `Select-Object`. This cmdlet allows you to select certain properties from the output of the preceding cmdlets. If a property in the output contains another object, you can expand that property to view that object. Expanding a property also allows only the value of the property to be displayed. It also allows you to return a specified number of entries from the beginning or end of the output. You can also select unique entries of a certain property. 
+
+```powershell
+#view only the full path and creation date of the contents of a directory
+Get-Childitem C:\Windows | Select-Object Fullname,CreationTime
+#view the first 10 processes running on the machine
+Get-Process | select-object -first 10
+#Display only the value of the Name property of each file in a folder
+get-Childitem C:\Windows | Select-Object -expandproperty name
+```
+
+`Select-Object` is a critical cmdlet for using PowerShell. Learning it's usage can drastically improve your script processing speed, and improve the readability of your console outputs.
+
+### Sort-Object
+
+`Sort-Object` is used to sort from 'lowest' to 'highest'. In terms of Numbers, 0 is the lowest. In terms of the alphabet, A is the lowest. You can switch the order with the `-descending` switch. You can use this in conjunction with the `Select-Object` cmdlet to select a certain amount of objects from the beginning or end of a list of output
+
+```powershell
+# Sort the running processess alphabetically by name
+Get-Process | sort-object
+# Find the 5 largest files in a folder
+Get-ChildItem c:\Windows | Sort-Object -property Length -descending | select-object -first 5
+```
+
+### Tee-Object
+
+`Tee-Object` is used to simultaneously store output into a variable or file, and continue using it in the pipeline. With the `-append` switch, you can keep a continuous log file of command output, while also writing the unique command output to its own file. You could also use this to store full output data to a variable, while continuing to filter the output for a nicer view of the data in the console.
+
+```powershell
+# Add output to continuous log and unique log simultaneously
+Get-Process | tee-object -filepath "C:\Logs\Continuous.log" -append | out-file "C:\Logs\today.log"
+# Display selected properties of a command while writing all output to variable for later use
+Get-Process | Tee-Object -variable proc | select-object Name,CPU,Workingset
+```
+
+### Where-Object
+
+`Where-Object` is your classic filter command. `Where-Object` will only return output that matches a specified condition. `Where-Object` uses `Comparison Operators` to evaluate the conditions specified. More information for these can be found in the `about_Comparison_operators` help file
+
+```powershell
+# find running Chrome processes
+Get-process | where-object -property name -match 'Chrome'
+# Get a count of child directories inside a director
+Get-childitem c:\windows | Where-object -property PSIsContainer -eq $true | measure-object
+```
+
+This post has become a lot longer than intended, but with these commands, you can learn the foundation of data filtering with PowerShell. As with all things in life, understanding the basics and building off of them will take you from a novice to an expert. 
