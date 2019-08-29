@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Buisness Card
+title: Business Card
 ---
 
 {
