@@ -3,7 +3,7 @@ layout: page
 title: Using Built-In Help Tools
 ---
 
-# First, some terminology
+# Welcome to Powershell!
 
 We use `cmdlets` to interact with PowerShell. All cmdlets are created in a `Verb-Noun` format, followed by `-parameters`. Some parameters are `positional`, and do not require adding the parameter. An example of this:
 
