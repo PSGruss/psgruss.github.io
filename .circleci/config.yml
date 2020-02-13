@@ -34,7 +34,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "2a:bf:c8:64:2b:87:b2:93:7d:67:5a:eb:f9:95:03:73"
+            - "48:8b:17:93:3d:c3:54:93:51:02:f9:00:9f:bd:17:31"
           
       - prepare_jekyll_installation
       - run:
